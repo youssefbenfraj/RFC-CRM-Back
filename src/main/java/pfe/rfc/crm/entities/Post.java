@@ -1,6 +1,7 @@
 package pfe.rfc.crm.entities;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -19,12 +20,14 @@ import java.util.List;
 public class Post implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    Long idPost;
-    String titlePost;
-    String contentPost;
-    String category;
-    Status status;
-    LocalDateTime timestamp;
+    private Long idPost;
+    @NotNull(message = "Title cannot be empty")
+    private String titlePost;
+    @NotNull(message = "Content cannot be empty")
+    private String contentPost;
+    private String category;
+    private Status status;
+    private LocalDateTime timestamp;
 
     @JsonIgnore
     @ManyToOne // Many posts can belong to one user
