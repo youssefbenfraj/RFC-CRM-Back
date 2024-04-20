@@ -7,5 +7,5 @@ RUN mvn package -DskipTests
 
 FROM openjdk:11
 EXPOSE 8075
-ADD CRM-0.0.1-SNAPSHOT.jar CRM-0.0.1.jar
-ENTRYPOINT ["java","-jar","/CRM-0.0.1.jar"]
+ADD CRM-0.0.1-SNAPSHOT.jar CRM-0.0.1-SNAPSHOT.jar
+ENTRYPOINT ["java","-jar","/CRM-0.0.1-SNAPSHOT.jar"]
