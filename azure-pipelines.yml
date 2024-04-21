@@ -45,7 +45,7 @@ stages:
     - task: Docker@2
       inputs:
         containerRegistry: 'DockerHub'
-        repository: 'CRM-Back-test'
+        repository: 'wetmonkey/CRM-Back-test'
         command: 'buildAndPush'
         Dockerfile: '**/Dockerfile'
 
