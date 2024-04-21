@@ -10,26 +10,33 @@ resources:
 
 variables:
   tag: '$(Build.BuildId)'
+    # Web app name
+  webAppName: 'RFC-CRM-Back'
+
+  # Agent VM image name
+  vmImageName: 'ubuntu-latest'
 
 stages:
 - stage: Build
-  displayName: Build image
+  displayName: Build stage
   jobs:
-  - job: Build
-    displayName: Build
+  - job: MavenPackageAndPublishArtifacts
+    displayName: Maven Package and Publish Artifacts
     pool:
-      vmImage: ubuntu-latest
+      vmImage: $(vmImageName)
+    
     steps:
-    - task: Maven@4
+    - task: Maven@3
+      displayName: 'Maven Package'
       inputs:
         mavenPomFile: 'pom.xml'
-        publishJUnitResults: false
-        javaHomeOption: 'JDKVersion'
-        jdkVersionOption: '1.11'
-        mavenVersionOption: 'Default'
-        mavenAuthenticateFeed: false
-        effectivePomSkip: false
-        sonarQubeRunAnalysis: false
+
+    - task: CopyFiles@2
+      displayName: 'Copy Files to artifact staging directory'
+      inputs:
+        SourceFolder: '$(System.DefaultWorkingDirectory)'
+        Contents: '**/target/*.?(war|jar)'
+        TargetFolder: $(Build.ArtifactStagingDirectory)
     - task: Docker@2
       inputs:
         containerRegistry: 'DockerHub'
