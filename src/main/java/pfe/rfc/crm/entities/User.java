@@ -54,6 +54,11 @@ public class User implements Serializable {
     @JsonIgnore
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL) // One user can have many posts
     private List<Post> posts;
+
+    @JsonIgnore
+    @OneToMany(mappedBy = "deal", cascade = CascadeType.ALL)
+    private List<Subscription> subscriptions;
+
 /*
     @JsonIgnore
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL) // One user can have many deals

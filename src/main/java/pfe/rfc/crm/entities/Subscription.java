@@ -7,32 +7,28 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import javax.persistence.*;
-import java.io.Serializable;
-import java.time.LocalDateTime;
-import java.util.List;
+import java.time.LocalDate;
 
 @Entity
 @NoArgsConstructor
 @AllArgsConstructor
 @Getter
 @Setter
-public class Chat implements Serializable {
+public class Subscription {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long idChat;
+    private Long idSubscription;
 
-    @ElementCollection
-    private List<Message> messageList;
-
-    @JsonIgnore
-    @ManyToOne
-    @JoinColumn(name = "sender_id")
-    private User sender;
+    private LocalDate subscriptionDate;
+    private String status;
 
     @JsonIgnore
     @ManyToOne
-    @JoinColumn(name = "receiver_id")
-    private User receiver;
+    @JoinColumn(name = "deal_id")
+    private Deal deal;
 
-    private LocalDateTime timestamp;
+    @JsonIgnore
+    @ManyToOne
+    @JoinColumn(name = "user_id")
+    private User user;
 }

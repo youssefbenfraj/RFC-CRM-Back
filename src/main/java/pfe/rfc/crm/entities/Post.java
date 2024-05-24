@@ -25,17 +25,23 @@ public class Post implements Serializable {
     private String titlePost;
     @NotNull(message = "Content cannot be empty")
     private String contentPost;
+    @Column(length = 10000)
     private String category;
     private Status status;
     private LocalDateTime timestamp;
 
     @JsonIgnore
+    @OneToMany(mappedBy = "post", cascade = CascadeType.ALL)
+    private List<Comment> comments;
+
+    @JsonIgnore
+    @OneToMany(mappedBy = "post", cascade = CascadeType.ALL)
+    private List<LikePost> likePosts;
+
     @ManyToOne // Many posts can belong to one user
     @JoinColumn(name = "idUser")
     private User user;
 
-    @JsonIgnore
-    @OneToMany(mappedBy = "post", cascade = CascadeType.ALL) // One post can have many chat messages
-    private List<Chat> chats;
+
 
 }

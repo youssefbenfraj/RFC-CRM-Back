@@ -3,6 +3,7 @@ package pfe.rfc.crm.services;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 import pfe.rfc.crm.entities.User;
+import pfe.rfc.crm.exceptions.UserNotFoundException;
 import pfe.rfc.crm.interfaces.IUserService;
 import pfe.rfc.crm.repositories.UserRepo;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -40,4 +41,16 @@ public class UserService implements IUserService {
     public User retrieveUserByMail(String mail) {
         return userRepo.findBymail(mail).orElse(null);
     }
+
+    public User getUserById(Long userId) {
+        return userRepo.findById(userId).orElse(null);
+    }
+
+
+    @Override
+    public User findUserById(Long id) throws UserNotFoundException {
+        return userRepo.findById(id)
+                .orElseThrow(UserNotFoundException::new);
+    }
+
 }

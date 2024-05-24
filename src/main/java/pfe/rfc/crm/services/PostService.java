@@ -2,14 +2,19 @@ package pfe.rfc.crm.services;
 
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
+import pfe.rfc.crm.entities.Comment;
 import pfe.rfc.crm.entities.Post;
 import pfe.rfc.crm.entities.User;
 import pfe.rfc.crm.interfaces.IPostService;
+import pfe.rfc.crm.repositories.CommentRepo;
+import pfe.rfc.crm.repositories.LikeRepo;
 import pfe.rfc.crm.repositories.PostRepo;
 import pfe.rfc.crm.repositories.UserRepo;
 
 import javax.persistence.EntityNotFoundException;
 import java.util.List;
+import java.util.Map;
+import java.util.stream.Collectors;
 
 import static pfe.rfc.crm.entities.Status.PENDING;
 
@@ -54,5 +59,22 @@ public class PostService implements IPostService {
         User user = userRepo.findById(userId)
                 .orElseThrow(() -> new EntityNotFoundException("User not found with id: " + userId));
         return postRepo.findByUser(user);
+    }
+    /////////////
+    private final CommentRepo commentRepo;
+
+    public Map<Long, List<Comment>> getCommentsPerPost() {
+        List<Post> posts = getAllPosts();
+        return posts.stream()
+                .collect(Collectors.toMap(Post::getIdPost, post -> commentRepo.findByPost(post)));
+    }
+
+
+    private LikeRepo likeRepo;
+
+
+
+    public int getLikesCountForPost(Long postId) {
+        return likeRepo.countByPostIdPost(postId);
     }
 }

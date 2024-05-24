@@ -2,10 +2,12 @@ package pfe.rfc.crm.controllers;
 
 import lombok.AllArgsConstructor;
 import org.springframework.web.bind.annotation.*;
+import pfe.rfc.crm.entities.Comment;
 import pfe.rfc.crm.entities.Post;
 import pfe.rfc.crm.interfaces.IPostService;
 
 import java.util.List;
+import java.util.Map;
 
 @RestController
 @RequestMapping("/posts")
@@ -44,5 +46,15 @@ public class PostController {
     @GetMapping("/getPostsByUser/{userId}")
     public List<Post> retrievePostsByUser(@PathVariable Long userId) {
         return postService.getPostsByUserId(userId);
+    }
+
+    @GetMapping("/comments")
+    public Map<Long, List<Comment>> getCommentsPerPost() {
+        return postService.getCommentsPerPost();
+    }
+
+    @GetMapping("/posts/getLikesCount/{postId}")
+    public int getLikesCountForPost(@PathVariable Long postId) {
+        return postService.getLikesCountForPost(postId);
     }
 }

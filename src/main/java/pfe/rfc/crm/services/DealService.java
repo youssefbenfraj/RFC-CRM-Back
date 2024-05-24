@@ -3,13 +3,17 @@ package pfe.rfc.crm.services;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 import pfe.rfc.crm.entities.Deal;
+import pfe.rfc.crm.entities.Subscription;
 import pfe.rfc.crm.entities.User;
 import pfe.rfc.crm.interfaces.IDealService;
 import pfe.rfc.crm.repositories.DealRepo;
+import pfe.rfc.crm.repositories.SubscriptionRepo;
 import pfe.rfc.crm.repositories.UserRepo;
 
 import javax.persistence.EntityNotFoundException;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 @Service
 @AllArgsConstructor
@@ -46,4 +50,27 @@ public class DealService implements IDealService {
         deal.setUser(user);
         return dealRepo.save(deal);
     }
+
+
+    /////////////////
+    private final SubscriptionRepo subscriptionRepo;
+
+    public Map<Long, Long> getSubscriptionsCountPerDeal() {
+        List<Object[]> results = subscriptionRepo.countSubscriptionsPerDeal();
+        Map<Long, Long> subscriptionsCountPerDeal = new HashMap<>();
+        for (Object[] result : results) {
+            subscriptionsCountPerDeal.put((Long) result[0], (Long) result[1]);
+        }
+        return subscriptionsCountPerDeal;
+    }
+    public Map<Long, List<Subscription>> getSubscriptionsPerDeal() {
+        List<Deal> deals = getAllDeals();
+        Map<Long, List<Subscription>> subscriptionsPerDeal = new HashMap<>();
+        for (Deal deal : deals) {
+            List<Subscription> subscriptions = subscriptionRepo.findByDeal(deal);
+            subscriptionsPerDeal.put(deal.getIdDeal(), subscriptions);
+        }
+        return subscriptionsPerDeal;
+    }
+
 }
